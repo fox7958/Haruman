@@ -44,6 +44,7 @@ public class AlbaListActivity extends AppCompatActivity implements NavigationVie
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -58,7 +59,7 @@ public class AlbaListActivity extends AppCompatActivity implements NavigationVie
     private void initData() {
         for (int i = 0; i < 10 ; i++){
 
-            mAdapter.add("123456789abcdefg");
+            mAdapter.add("알바알바알바알바알바알바알바알바");
         }
     }
 
@@ -97,12 +98,22 @@ public class AlbaListActivity extends AppCompatActivity implements NavigationVie
 
             Intent intent = new Intent(AlbaListActivity.this, SubstituteActivity.class);
             startActivity(intent);
+            finish();
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_alba) {
 
-        } else if (id == R.id.nav_slideshow) {
+            Intent intent = new Intent(AlbaListActivity.this, AlbaListActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_setting) {
+
+            Intent intent = new Intent(AlbaListActivity.this, SettingActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_after) {
+
+            Intent intent = new Intent(AlbaListActivity.this, AfterActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 
