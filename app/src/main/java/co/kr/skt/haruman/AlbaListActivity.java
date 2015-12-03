@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 /**
@@ -54,12 +56,17 @@ public class AlbaListActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        Button btnFit = (Button)findViewById(R.id.btn_fit);
+        btnFit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AlbaListActivity.this, "12321312", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
     private void initData() {
         for (int i = 0; i < 10 ; i++){
-
-            mAdapter.add("알바알바알바알바알바알바알바알바");
+            mAdapter.add("아아아아아아아아아아아아아아아아");
         }
     }
 

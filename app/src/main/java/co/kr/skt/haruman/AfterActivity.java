@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 /**
  * Created by T on 2015-12-02.
@@ -31,6 +33,17 @@ public class AfterActivity extends AppCompatActivity implements NavigationView.O
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Button btn_Insert = (Button) findViewById(R.id.btn_insert);
+
+        btn_Insert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(AfterActivity.this, AfterInsertActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -51,7 +64,6 @@ public class AfterActivity extends AppCompatActivity implements NavigationView.O
 
             Intent intent = new Intent(AfterActivity.this, SettingActivity.class);
             startActivity(intent);
-
 
         } else if (id == R.id.nav_after) {
 

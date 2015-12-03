@@ -22,6 +22,7 @@
         <activity android:name=".SubstituteActivity" android:label="하루만"/>
         <activity android:name=".SettingActivity" android:label="설정"/>
         <activity android:name=".AfterActivity" android:label="만족도"/>
+        <activity android:name=".AfterInsertActivity" android:label="만족도 글쓰기"/>
     </application>
 
 </manifest>
