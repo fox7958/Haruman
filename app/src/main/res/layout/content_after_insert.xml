@@ -80,11 +80,11 @@
                         android:gravity="right">
 
                         <LinearLayout
-                            android:layout_gravity="center"
-                            android:gravity="right"
-                            android:layout_weight="1"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="right">
 
                             <Spinner
                                 android:id="@+id/spinner_after_town_insert"
@@ -100,11 +100,11 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_gravity="center"
-                            android:gravity="right"
-                            android:layout_weight="1"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="right">
 
                             <Spinner
                                 android:id="@+id/spinner_after_borough_insert"
@@ -132,85 +132,214 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/inputLayoutSubstitute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <TextView
+                    android:id="@+id/edit_after_insert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:hint="일의 만족도"
+                    android:textSize="12dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:gravity="right"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/edit_after_insert"
+
+                    <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:hint="일의 만족도"
-                        android:textSize="12dp" />
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/after" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
                         android:orientation="vertical">
 
-                        <ImageView
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/after" />
+                            android:layout_height="wrap_content">
 
-                        <RadioGroup
-                            android:id="@+id/after_group"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
+                            <RadioGroup
+                                android:id="@+id/after_group"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"></LinearLayout>
+                                android:orientation="horizontal">
 
-                            <RadioButton
-                                android:id="@+id/after_button1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                                <RadioButton
+                                    android:id="@+id/after_button1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <RadioButton
+                                    android:id="@+id/after_button2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <RadioButton
+                                    android:id="@+id/after_button3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <RadioButton
+                                    android:id="@+id/after_button4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <RadioButton
+                                    android:id="@+id/after_button5"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                            </RadioGroup>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1"/>
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="1" />
 
-                            <RadioButton
-                                android:id="@+id/after_button2"
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
                                 android:text="2" />
 
-                            <RadioButton
-                                android:id="@+id/after_button3"
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
                                 android:text="3" />
 
-                            <RadioButton
-                                android:id="@+id/after_button4"
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
                                 android:text="4" />
 
-                            <RadioButton
-                                android:id="@+id/after_button5"
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
                                 android:text="5" />
-                        </RadioGroup>
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
+    </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_horizontal_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutPay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/edit_pay_insert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:hint="급여 지금 시기"
+                    android:textSize="12dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <RadioGroup
+                                android:id="@+id/after_pay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:layout_marginLeft="40dp"
+                                    android:id="@+id/pay_button1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <RadioButton
+                                    android:layout_marginLeft="70dp"
+                                    android:id="@+id/pay_button2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <RadioButton
+                                    android:layout_marginLeft="80dp"
+                                    android:id="@+id/pay_button3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                            </RadioGroup>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="1주일 이내" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="2주일 이내" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="2주일 이상" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
