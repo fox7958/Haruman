@@ -105,7 +105,6 @@ public class AlbaListActivity extends AppCompatActivity implements NavigationVie
 
             Intent intent = new Intent(AlbaListActivity.this, SubstituteActivity.class);
             startActivity(intent);
-            finish();
 
         } else if (id == R.id.nav_alba) {
 
