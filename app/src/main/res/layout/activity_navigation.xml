@@ -38,6 +38,7 @@
                     app:cardElevation="10dp">
 
                     <Button
+                        android:id="@+id/nav_alba"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
@@ -53,7 +54,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:text="홈" />
+                        android:text="대타"
+                        android:id="@+id/nav_substitute"/>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
 
@@ -69,10 +71,11 @@
                     android:layout_weight="1">
 
                     <Button
+                        android:id="@+id/nav_setting"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:text="홈" />
+                        android:text="설정" />
 
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -83,10 +86,11 @@
                     android:layout_marginRight="30dp">
 
                     <Button
+                        android:id="@+id/nav_after"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:text="홈" />
+                        android:text="만족도" />
 
                 </android.support.v7.widget.CardView>
             </LinearLayout>

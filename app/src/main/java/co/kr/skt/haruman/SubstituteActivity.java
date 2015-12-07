@@ -11,6 +11,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 /**
@@ -18,8 +23,11 @@ import android.widget.Toast;
  */
 public class SubstituteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    boolean mlnitSpinner;
     RecyclerView mRecyclerView_sub;
     SubstituteAdapter mSubstituteAdapter;
+    Spinner spinnerTown, spinnerBorough, spinnerType;
+    ArrayAdapter<CharSequence> townspin, boroughspin, typespin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +61,145 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Button substitute = (Button)findViewById(R.id.nav_substitute);
+        Button alba = (Button)findViewById(R.id.nav_alba);
+        Button setting = (Button)findViewById(R.id.nav_setting);
+        Button after = (Button)findViewById(R.id.nav_after);
+
+        substitute.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SubstituteActivity.this, SubstituteActivity.class);
+                startActivity(intent);
+                finish();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        alba.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SubstituteActivity.this, AlbaListActivity.class);
+                startActivity(intent);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SubstituteActivity.this, SettingActivity.class);
+                startActivity(intent);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        after.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SubstituteActivity.this, AfterActivity.class);
+                startActivity(intent);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        spinnerTown = (Spinner)findViewById(R.id.spinner_town_substitute);
+        spinnerType = (Spinner)findViewById(R.id.spinner_type_substitute);
+        spinnerBorough = (Spinner)findViewById(R.id.spinner_borough_substitue);
+
+        townspin = ArrayAdapter.createFromResource(this, R.array.spinner_town, R.layout.support_simple_spinner_dropdown_item);
+        townspin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        typespin = ArrayAdapter.createFromResource(this, R.array.spinner_type, R.layout.support_simple_spinner_dropdown_item);
+        typespin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        spinnerTown.setAdapter(townspin);
+        spinnerType.setAdapter(typespin);
+
+        spinnerTown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mlnitSpinner == false) {
+                    mlnitSpinner = true;
+                    return;
+                }
+
+                if (townspin.getItem(position).equals("서울시")) {
+                    boroughspin = ArrayAdapter.createFromResource(SubstituteActivity.this, R.array.spinner_borough_seoul, R.layout.support_simple_spinner_dropdown_item);
+                    spinnerBorough.setAdapter(boroughspin);
+
+                    spinnerBorough.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if (mlnitSpinner == false) {
+                                mlnitSpinner = true;
+                                return;
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                } else if (townspin.getItem(position).equals("경기도")) {
+                    boroughspin = ArrayAdapter.createFromResource(SubstituteActivity.this, R.array.spinner_borough_gyungki, R.layout.support_simple_spinner_dropdown_item);
+                    spinnerBorough.setAdapter(boroughspin);
+
+                    spinnerBorough.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if (mlnitSpinner == false) {
+                                mlnitSpinner = true;
+                                return;
+                            }
+                        }
+
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mlnitSpinner == false) {
+                    mlnitSpinner = true;
+                    return;
+                }
+                Toast.makeText(SubstituteActivity.this, typespin.getItem(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void initData() {
         for (int i = 0; i < 10; i++) {
             mSubstituteAdapter.add("대타대타대타대타대타대타");
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -86,11 +228,8 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
             Intent intent = new Intent(SubstituteActivity.this, AfterActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

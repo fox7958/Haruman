@@ -36,24 +36,17 @@
                 android:textStyle="bold" />
 
             <Spinner
+                android:id="@+id/spinner_town_substitute"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"></Spinner>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="시" />
 
             <Spinner
+                android:entries="@array/spinner_borough_seoul"
+                android:id="@+id/spinner_borough_substitue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"></Spinner>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="구" />
         </LinearLayout>
 
         <LinearLayout
@@ -74,6 +67,7 @@
                 android:textStyle="bold" />
 
             <Spinner
+                android:id="@+id/spinner_type_substitute"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"></Spinner>

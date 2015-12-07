@@ -92,11 +92,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"></Spinner>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="시" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -107,16 +102,12 @@
                             android:gravity="right">
 
                             <Spinner
+                                android:entries="@array/spinner_borough_seoul"
                                 android:id="@+id/spinner_after_borough_insert"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"></Spinner>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="구" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -357,11 +348,18 @@
                 android:layout_height="wrap_content">
 
                 <EditText
+                    android:maxLength="80"
                     android:id="@+id/edit_content_insert"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:ems="13"
                     android:hint="한줄후기" />
+
+                <TextView
+                    android:textColor="#bdbdbd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="80자 이내로 작성해주세요."/>
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>

@@ -44,6 +44,58 @@ public class AfterActivity extends AppCompatActivity implements NavigationView.O
                 startActivity(intent);
             }
         });
+        Button substitute = (Button)findViewById(R.id.nav_substitute);
+        Button alba = (Button)findViewById(R.id.nav_alba);
+        Button setting = (Button)findViewById(R.id.nav_setting);
+        Button after = (Button)findViewById(R.id.nav_after);
+
+        substitute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AfterActivity.this, SubstituteActivity.class);
+                startActivity(intent);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        alba.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AfterActivity.this, AlbaListActivity.class);
+                startActivity(intent);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AfterActivity.this, SettingActivity.class);
+                startActivity(intent);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        after.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AfterActivity.this, AfterActivity.class);
+                startActivity(intent);
+                finish();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -70,10 +122,6 @@ public class AfterActivity extends AppCompatActivity implements NavigationView.O
             Intent intent = new Intent(AfterActivity.this, AfterActivity.class);
             startActivity(intent);
             finish();
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

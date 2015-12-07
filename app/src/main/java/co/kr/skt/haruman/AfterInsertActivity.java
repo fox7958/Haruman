@@ -12,9 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,11 @@ import android.widget.Toast;
  */
 public class AfterInsertActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    boolean mlnitSpinner;
+    ArrayAdapter<CharSequence> townspin;
+    ArrayAdapter<CharSequence> boroughspin;
+
+    Spinner spinnerTown, spinnerBorough;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +58,116 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                 submitForm();
             }
         });
+        Button substitute = (Button)findViewById(R.id.nav_substitute);
+        Button alba = (Button)findViewById(R.id.nav_alba);
+        Button setting = (Button)findViewById(R.id.nav_setting);
+        Button after = (Button)findViewById(R.id.nav_after);
 
+        substitute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AfterInsertActivity.this, SubstituteActivity.class);
+                startActivity(intent);
+                finish();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        alba.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AfterInsertActivity.this, AlbaListActivity.class);
+                startActivity(intent);
+                finish();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AfterInsertActivity.this, SettingActivity.class);
+                startActivity(intent);
+                finish();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        after.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AfterInsertActivity.this, AfterActivity.class);
+                startActivity(intent);
+                finish();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        spinnerTown = (Spinner)findViewById(R.id.spinner_after_town_insert);
+        spinnerBorough = (Spinner)findViewById(R.id.spinner_after_borough_insert);
+
+        townspin = ArrayAdapter.createFromResource(this, R.array.spinner_town, R.layout.support_simple_spinner_dropdown_item);
+        townspin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinnerTown.setAdapter(townspin);
+
+        spinnerTown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mlnitSpinner == false) {
+                    mlnitSpinner = true;
+                    return;
+                }
+                Toast.makeText(AfterInsertActivity.this, townspin.getItem(position), Toast.LENGTH_SHORT).show();
+
+                if (townspin.getItem(position).equals("서울시")) {
+                    boroughspin = ArrayAdapter.createFromResource(AfterInsertActivity.this, R.array.spinner_borough_seoul, R.layout.support_simple_spinner_dropdown_item);
+                    spinnerBorough.setAdapter(boroughspin);
+
+                    spinnerBorough.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if (mlnitSpinner == false) {
+                                mlnitSpinner = true;
+                                return;
+                            }
+                            Toast.makeText(AfterInsertActivity.this, boroughspin.getItem(position), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                } else if (townspin.getItem(position).equals("경기도")) {
+                    boroughspin = ArrayAdapter.createFromResource(AfterInsertActivity.this, R.array.spinner_borough_gyungki, R.layout.support_simple_spinner_dropdown_item);
+                    spinnerBorough.setAdapter(boroughspin);
+
+                    spinnerBorough.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if (mlnitSpinner == false) {
+                                mlnitSpinner = true;
+                                return;
+                            }
+                            Toast.makeText(AfterInsertActivity.this, boroughspin.getItem(position), Toast.LENGTH_SHORT).show();
+                        }
+
+
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void submitForm() {
@@ -84,7 +201,15 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
         return true;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     private boolean validateContent() {
         TextInputLayout inputLayoutContent = (TextInputLayout) findViewById(R.id.inputLayoutContent);
@@ -147,10 +272,6 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
             Intent intent = new Intent(AfterInsertActivity.this, AfterActivity.class);
             startActivity(intent);
             finish();
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -23,10 +23,11 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <Button
+                android:id="@+id/btn_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:background="@drawable/ic_navigate_before_white_24dp" />
+                android:background="@drawable/backbutton" />
 
         </android.support.v7.widget.Toolbar>
 
