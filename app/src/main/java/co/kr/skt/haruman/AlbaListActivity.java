@@ -31,7 +31,6 @@ public class AlbaListActivity extends AppCompatActivity implements NavigationVie
     ArrayAdapter<CharSequence> boroughspin;
     ArrayAdapter<CharSequence> typespin;
     Spinner spinnerTown, spinnerBorough, spinnerType;
-    String a ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
