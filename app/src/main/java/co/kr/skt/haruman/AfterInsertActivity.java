@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -174,9 +173,6 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
         if (!validateTitle()) {
             return;
         }
-        if (!validateLocal()) {
-            return;
-        }
         if(!validateContent()){
             return;
         }
@@ -221,20 +217,6 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
 
         } else {
             inputLayoutContent.setErrorEnabled(false);
-        }
-        return true;
-    }
-
-    private boolean validateLocal() {
-        TextInputLayout inputLayoutLocal = (TextInputLayout) findViewById(R.id.inputLayoutLocal);
-        TextView inputLocal = (TextView) findViewById(R.id.edit_local_insert);
-        if (inputLocal.getText().toString().trim().isEmpty()) {   // 이 조건을 스피너에서 아무것도 선택하지 않았을 때로 바꾸면된다.
-            inputLayoutLocal.setError("지역을 선택해주세요");
-            requestFocus(inputLocal);
-            return false;
-
-        } else {
-            inputLayoutLocal.setErrorEnabled(false);
         }
         return true;
     }
