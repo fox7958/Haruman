@@ -153,7 +153,6 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                         }
 
 
-
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
 
@@ -165,6 +164,13 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        Button btnBack = (Button)findViewById(R.id.btn_back_after_insert);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

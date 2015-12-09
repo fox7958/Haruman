@@ -137,6 +137,13 @@ public class AfterActivity extends AppCompatActivity implements NavigationView.O
 
             }
         });
+        Button btnBack = (Button)findViewById(R.id.btn_back_after);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void initData(){

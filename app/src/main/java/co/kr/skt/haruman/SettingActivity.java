@@ -200,6 +200,13 @@ public class SettingActivity extends AppCompatActivity implements NavigationView
 
             }
         });
+        Button btnBack = (Button)findViewById(R.id.btn_back_setting);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

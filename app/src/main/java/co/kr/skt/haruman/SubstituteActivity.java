@@ -201,6 +201,13 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
                 startActivity(intent);
             }
         });
+        Button btnBack = (Button)findViewById(R.id.btn_back_sub);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initData() {

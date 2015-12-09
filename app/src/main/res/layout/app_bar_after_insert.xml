@@ -22,6 +22,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <Button
+                android:id="@+id/btn_back_after_insert"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

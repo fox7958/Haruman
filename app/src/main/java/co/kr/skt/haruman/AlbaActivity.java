@@ -37,6 +37,7 @@ public class AlbaActivity extends AppCompatActivity implements NavigationView.On
     ArrayAdapter<CharSequence> boroughspin;
     ArrayAdapter<CharSequence> typespin;
     Spinner spinnerTown, spinnerBorough, spinnerType;
+    AlbaViewHolder albaViewHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +138,7 @@ public class AlbaActivity extends AppCompatActivity implements NavigationView.On
         spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(mlnitSpinner == false){
+                if (mlnitSpinner == false) {
                     mlnitSpinner = true;
                     return;
                 }
@@ -210,6 +211,7 @@ public class AlbaActivity extends AppCompatActivity implements NavigationView.On
         for (int i = 0; i < 10 ; i++){
             mAdapter.add("12345678910");
         }
+
     }
 
     @Override
@@ -266,7 +268,7 @@ class AlbaAdapter extends RecyclerView.Adapter<AlbaViewHolder> {
 
     @Override
     public void onBindViewHolder(AlbaViewHolder holder, int position) {
-        holder.setData(items.get(position), items.get(position), items.get(position), items.get(position));
+        holder.setData(items.get(position), items.get(position), items.get(position), items.get(position), items.get(position));
         holder.setOnItemClickListener(mItemClickListener);
     }
 
@@ -278,7 +280,7 @@ class AlbaAdapter extends RecyclerView.Adapter<AlbaViewHolder> {
 class AlbaViewHolder extends RecyclerView.ViewHolder {
 
     public interface OnItemClickListener{
-        public void onItemClick(String name, int position);
+        void onItemClick(String name, int position);
     }
 
     OnItemClickListener mListener;
@@ -291,6 +293,7 @@ class AlbaViewHolder extends RecyclerView.ViewHolder {
     EditText editLocal;
     EditText editType;
     EditText editPay;
+    EditText editFinish;
 
     public AlbaViewHolder(View itemView) {
         super(itemView);
@@ -304,26 +307,32 @@ class AlbaViewHolder extends RecyclerView.ViewHolder {
                     mListener.onItemClick(mLocal, position);
                     mListener.onItemClick(mType, position);
                     mListener.onItemClick(mPay, position);
+                    mListener.onItemClick(mFinish, position);
                 }
             }
         });
         editLocal = (EditText)itemView.findViewById(R.id.edit_local);
         editType = (EditText)itemView.findViewById(R.id.edit_type);
         editPay = (EditText)itemView.findViewById(R.id.edit_pay);
+        editFinish = (EditText)itemView.findViewById(R.id.edit_finish);
 
     }
     String mLocal;
     String mType;
     String mPay;
     String mTitle;
-    public void setData(String title, String local, String type, String pay){
+    String mFinish;
+
+    public void setData(String title, String local, String type, String pay, String finish){
         mTitle = title;
         mLocal = local;
         mType = type;
         mPay = pay;
+        mFinish = finish;
         editTitle.setText(title);
         editLocal.setText(local);
         editType.setText(type);
         editPay.setText(pay);
+        editFinish.setText(finish);
     }
 }

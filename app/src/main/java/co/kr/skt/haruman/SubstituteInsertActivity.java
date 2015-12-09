@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 /**
@@ -21,11 +20,9 @@ import android.widget.Spinner;
  */
 public class SubstituteInsertActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    Spinner spinnerTown, spinnerBorough, spinnerType, spinnerTime;
-    ArrayAdapter<CharSequence> townspin, boroughspin, typespin, timespin;
+    Spinner spinnerTown, spinnerBorough, spinnerType, spinnerTime, spinnerMonth, spinnerDay;
+    ArrayAdapter<CharSequence> townspin, boroughspin, typespin, timespin, monthspin, dayspin;
     boolean a;
-    EditText editMonth, editDay;
-    Button btnMonthUp, btnMonthDown, btnDayUp, btnDayUp10, btnDayDown, btnDayDown10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,25 +91,29 @@ public class SubstituteInsertActivity extends AppCompatActivity implements Navig
         spinnerBorough = (Spinner) findViewById(R.id.spinner_borough_substitute_insert);
         spinnerType = (Spinner) findViewById(R.id.spinner_type_substitute_insert);
         spinnerTime = (Spinner) findViewById(R.id.spinner_time_substitute_insert);
+        spinnerMonth = (Spinner) findViewById(R.id.spinner_Month);
+        spinnerDay = (Spinner) findViewById(R.id.spinner_day);
 
         townspin = ArrayAdapter.createFromResource(this, R.array.spinner_town, R.layout.support_simple_spinner_dropdown_item);
         typespin = ArrayAdapter.createFromResource(this, R.array.spinner_type, R.layout.support_simple_spinner_dropdown_item);
         timespin = ArrayAdapter.createFromResource(this, R.array.spinner_time, R.layout.support_simple_spinner_dropdown_item);
+        monthspin = ArrayAdapter.createFromResource(this, R.array.month, R.layout.support_simple_spinner_dropdown_item);
 
         townspin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         typespin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         timespin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        monthspin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
         spinnerTown.setAdapter(townspin);
         spinnerType.setAdapter(typespin);
         spinnerTime.setAdapter(timespin);
+        spinnerMonth.setAdapter(monthspin);
 
         spinnerTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (a == false) {
                     a = true;
-                    ;
                 }
             }
 
@@ -172,43 +173,80 @@ public class SubstituteInsertActivity extends AppCompatActivity implements Navig
 
             }
         });
-        editMonth = (EditText)findViewById(R.id.edit_month);
-        editDay = (EditText)findViewById(R.id.edit_day);
-        btnMonthUp = (Button)findViewById(R.id.btn_monthup);
-        btnMonthDown = (Button)findViewById(R.id.btn_monthdown);
-        btnDayUp = (Button)findViewById(R.id.btn_dayup);
-        btnDayUp10 = (Button)findViewById(R.id.btn_dayup10);
-        btnDayDown = (Button)findViewById(R.id.btn_daydown);
-        btnDayDown10 = (Button)findViewById(R.id.btn_daydown10);
+        spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (a == false) {
+                    a = true;
+                }
+                String month = (String)monthspin.getItem(position);
+                if (month.equals("1") || month.equals("3") || month.equals("5") || month.equals("7") || month.equals("8") || month.equals("10") || month.equals("12")){
+                    dayspin = ArrayAdapter.createFromResource(SubstituteInsertActivity.this, R.array.day_31, R.layout.support_simple_spinner_dropdown_item);
+                    dayspin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                    spinnerDay.setAdapter(dayspin);
 
-        btnMonthUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int month = Integer.parseInt(editMonth.getText().toString());
-                editMonth.setText(month+1+"");
-                if(month == 12){
-                    editMonth.setText(1+"");
+                    spinnerDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if( a == false){
+                                a=true;
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                }else if (month.equals("2")){
+                    dayspin = ArrayAdapter.createFromResource(SubstituteInsertActivity.this, R.array.day_29, R.layout.support_simple_spinner_dropdown_item);
+                    dayspin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                    spinnerDay.setAdapter(dayspin);
+
+                    spinnerDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if( a == false ){
+                                a = true;
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                }else{
+                    dayspin = ArrayAdapter.createFromResource(SubstituteInsertActivity.this, R.array.day_30, R.layout.support_simple_spinner_dropdown_item);
+                    dayspin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                    spinnerDay.setAdapter(dayspin);
+
+                    spinnerDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if( a == false ){
+                                a = true;
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
                 }
             }
-        });
-        btnMonthDown.setOnClickListener(new View.OnClickListener(){
+
             @Override
-            public void onClick(View v) {
-                int month = Integer.parseInt(editMonth.getText().toString());
-                editMonth.setText(month-1+"");
-                if(month == 1){
-                    editMonth.setText(12+"");
-                }
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        btnDayUp.setOnClickListener(new View.OnClickListener(){
+        Button btnBack = (Button)findViewById(R.id.btn_back_sub_insert);
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int day = Integer.parseInt(editDay.getText().toString());
-                editDay.setText(day+1+"");
-                if(day == 9 || day == 19 || day == 29){
-                    editDay.setText(day-9+"");
-                }
+                finish();
             }
         });
     }
