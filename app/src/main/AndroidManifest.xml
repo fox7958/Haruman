@@ -10,7 +10,7 @@
         android:name=".MyHarumanApplication"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".AlbaListActivity"
+            android:name=".AlbaActivity"
             android:label="하루만"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -23,6 +23,7 @@
         <activity android:name=".SettingActivity" android:label="설정"/>
         <activity android:name=".AfterActivity" android:label="만족도"/>
         <activity android:name=".AfterInsertActivity" android:label="만족도 글쓰기"/>
+        <activity android:name=".SubstituteInsertActivity" android:label="대타 구하기"/>
     </application>
 
 </manifest>

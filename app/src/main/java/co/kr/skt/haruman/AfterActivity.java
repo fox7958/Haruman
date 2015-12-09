@@ -79,7 +79,7 @@ public class AfterActivity extends AppCompatActivity implements NavigationView.O
         alba.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AfterActivity.this, AlbaListActivity.class);
+                Intent intent = new Intent(AfterActivity.this, AlbaActivity.class);
                 startActivity(intent);
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -157,33 +157,7 @@ public class AfterActivity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_substitute) {
-
-            Intent intent = new Intent(AfterActivity.this, SubstituteActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_alba) {
-
-            Intent intent = new Intent(AfterActivity.this, AlbaListActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_setting) {
-
-            Intent intent = new Intent(AfterActivity.this, SettingActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_after) {
-
-            Intent intent = new Intent(AfterActivity.this, AfterActivity.class);
-            startActivity(intent);
-            finish();
-
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 }
 

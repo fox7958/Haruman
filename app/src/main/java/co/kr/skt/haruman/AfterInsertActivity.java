@@ -75,7 +75,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
         alba.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AfterInsertActivity.this, AlbaListActivity.class);
+                Intent intent = new Intent(AfterInsertActivity.this, AlbaActivity.class);
                 startActivity(intent);
                 finish();
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -239,7 +239,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
 
         } else if (id == R.id.nav_alba) {
 
-            Intent intent = new Intent(AfterInsertActivity.this, AlbaListActivity.class);
+            Intent intent = new Intent(AfterInsertActivity.this, AlbaActivity.class);
             startActivity(intent);
             finish();
 

@@ -10,24 +10,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by T on 2015-12-02.
  */
-public class SubstituteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class SubstituteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     boolean mlnitSpinner;
     RecyclerView mRecyclerView_sub;
     SubstituteAdapter mSubstituteAdapter;
     Spinner spinnerTown, spinnerBorough, spinnerType;
     ArrayAdapter<CharSequence> townspin, boroughspin, typespin;
+    Button buttonAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +69,12 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Button substitute = (Button)findViewById(R.id.nav_substitute);
-        Button alba = (Button)findViewById(R.id.nav_alba);
-        Button setting = (Button)findViewById(R.id.nav_setting);
-        Button after = (Button)findViewById(R.id.nav_after);
+        Button substitute = (Button) findViewById(R.id.nav_substitute);
+        Button alba = (Button) findViewById(R.id.nav_alba);
+        Button setting = (Button) findViewById(R.id.nav_setting);
+        Button after = (Button) findViewById(R.id.nav_after);
 
-        substitute.setOnClickListener(new View.OnClickListener(){
+        substitute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SubstituteActivity.this, SubstituteActivity.class);
@@ -80,7 +87,7 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
         alba.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SubstituteActivity.this, AlbaListActivity.class);
+                Intent intent = new Intent(SubstituteActivity.this, AlbaActivity.class);
                 startActivity(intent);
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -104,9 +111,9 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
-        spinnerTown = (Spinner)findViewById(R.id.spinner_town_substitute);
-        spinnerType = (Spinner)findViewById(R.id.spinner_type_substitute);
-        spinnerBorough = (Spinner)findViewById(R.id.spinner_borough_substitue);
+        spinnerTown = (Spinner) findViewById(R.id.spinner_town_substitute);
+        spinnerType = (Spinner) findViewById(R.id.spinner_type_substitute);
+        spinnerBorough = (Spinner) findViewById(R.id.spinner_borough_substitue);
 
         townspin = ArrayAdapter.createFromResource(this, R.array.spinner_town, R.layout.support_simple_spinner_dropdown_item);
         townspin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -185,6 +192,15 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
 
             }
         });
+
+        buttonAdd = (Button)findViewById(R.id.btn_add_substitute);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SubstituteActivity.this, SubstituteInsertActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initData() {
@@ -205,33 +221,93 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        return false;
+    }
+}
 
-        if (id == R.id.nav_substitute) {
+class SubstituteAdapter extends RecyclerView.Adapter<SubstituteViewHolder> {
 
-            Intent intent = new Intent(SubstituteActivity.this, SubstituteActivity.class);
-            startActivity(intent);
-            finish();
+    List<String> items = new ArrayList<String>();
 
-        } else if (id == R.id.nav_alba) {
+    SubstituteViewHolder.OnItemClickListener mItemClickListener;
 
-            Intent intent = new Intent(SubstituteActivity.this, AlbaListActivity.class);
-            startActivity(intent);
+    public void setOnItemClickListener(SubstituteViewHolder.OnItemClickListener listener) {
+        mItemClickListener = listener;
+    }
 
-        } else if (id == R.id.nav_setting) {
+    public void add(String item) {
+        items.add(item);
+        notifyDataSetChanged();
+    }
 
-            Intent intent = new Intent(SubstituteActivity.this, SettingActivity.class);
-            startActivity(intent);
+    @Override
+    public SubstituteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.substitutelist_view, null);
+        return new SubstituteViewHolder(v);
+    }
 
-        } else if (id == R.id.nav_after) {
+    @Override
+    public void onBindViewHolder(SubstituteViewHolder holder, int position) {
+        holder.setData(items.get(position), items.get(position), items.get(position), items.get(position));
+        holder.setOnItemClickListener(mItemClickListener);
+    }
 
-            Intent intent = new Intent(SubstituteActivity.this, AfterActivity.class);
-            startActivity(intent);
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+}
 
-        }
+class SubstituteViewHolder extends RecyclerView.ViewHolder {
+    public interface OnItemClickListener {
+        public void onItemClick(String name, int position);
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+    OnItemClickListener mListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
+    EditText editTitle_sub;
+    EditText editLocal_sub;
+    EditText editType_sub;
+    EditText editPay_sub;
+
+    public SubstituteViewHolder(View itemView) {
+        super(itemView);
+        editTitle_sub = (EditText) itemView.findViewById(R.id.edit_title_sub);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = getAdapterPosition();
+                if (mListener != null && position != RecyclerView.NO_POSITION) {
+                    mListener.onItemClick(mTitle, position);
+                    mListener.onItemClick(mLocal, position);
+                    mListener.onItemClick(mType, position);
+                    mListener.onItemClick(mPay, position);
+                }
+            }
+        });
+        editLocal_sub = (EditText) itemView.findViewById(R.id.edit_local_sub);
+        editType_sub = (EditText) itemView.findViewById(R.id.edit_type_sub);
+        editPay_sub = (EditText) itemView.findViewById(R.id.edit_pay_sub);
+
+    }
+
+    String mLocal;
+    String mType;
+    String mPay;
+    String mTitle;
+
+    public void setData(String title, String local, String type, String pay) {
+        mTitle = title;
+        mLocal = local;
+        mType = type;
+        mPay = pay;
+        editTitle_sub.setText(title);
+        editLocal_sub.setText(local);
+        editType_sub.setText(type);
+        editPay_sub.setText(pay);
     }
 }

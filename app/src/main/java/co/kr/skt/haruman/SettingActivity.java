@@ -59,7 +59,7 @@ public class SettingActivity extends AppCompatActivity implements NavigationView
         alba.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SettingActivity.this, AlbaListActivity.class);
+                Intent intent = new Intent(SettingActivity.this, AlbaActivity.class);
                 startActivity(intent);
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -204,34 +204,7 @@ public class SettingActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_substitute) {
-
-            Intent intent = new Intent(SettingActivity.this, SubstituteActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_alba) {
-
-            Intent intent = new Intent(SettingActivity.this, AlbaListActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_setting) {
-
-            Intent intent = new Intent(SettingActivity.this, SettingActivity.class);
-            startActivity(intent);
-            finish();
-
-        } else if (id == R.id.nav_after) {
-
-            Intent intent = new Intent(SettingActivity.this, AfterActivity.class);
-            startActivity(intent);
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
     @Override
     public void onBackPressed() {
