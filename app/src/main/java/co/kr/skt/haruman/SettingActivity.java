@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ public class SettingActivity extends AppCompatActivity implements NavigationView
     boolean mlnitSpinner;
     ArrayAdapter<CharSequence> townspin, boroughspin, yearspin, monthspin, dayspin;
     Spinner spinnerTown, spinnerBorough, spinnerYear, spinnerMonth, spinnerDay;
+    CheckBox checkF, checkM, checkAll, checkWeek, checkDay, checkDayNight, checkServing, checkManager, checkService, checkPro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,21 +121,20 @@ public class SettingActivity extends AppCompatActivity implements NavigationView
         spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(mlnitSpinner == false){
+                if (mlnitSpinner == false) {
                     mlnitSpinner = true;
                     return;
                 }
 
-                if (monthspin.getItem(position).equals("2")){
+                if (monthspin.getItem(position).equals("2")) {
                     dayspin = ArrayAdapter.createFromResource(SettingActivity.this, R.array.day_29, R.layout.support_simple_spinner_dropdown_item);
                     spinnerDay.setAdapter(dayspin);
-                }
-                else if (monthspin.getItem(position).equals("1")||monthspin.getItem(position).equals("3")||monthspin.getItem(position).equals("5")||monthspin.getItem(position).equals("7")||monthspin.getItem(position).equals("8")
-                        ||monthspin.getItem(position).equals("10")||monthspin.getItem(position).equals("12")){
+                } else if (monthspin.getItem(position).equals("1") || monthspin.getItem(position).equals("3") || monthspin.getItem(position).equals("5") || monthspin.getItem(position).equals("7") || monthspin.getItem(position).equals("8")
+                        || monthspin.getItem(position).equals("10") || monthspin.getItem(position).equals("12")) {
 
                     dayspin = ArrayAdapter.createFromResource(SettingActivity.this, R.array.day_31, R.layout.support_simple_spinner_dropdown_item);
                     spinnerDay.setAdapter(dayspin);
-                }else{
+                } else {
                     dayspin = ArrayAdapter.createFromResource(SettingActivity.this, R.array.day_30, R.layout.support_simple_spinner_dropdown_item);
                     spinnerDay.setAdapter(dayspin);
                 }
@@ -205,6 +207,74 @@ public class SettingActivity extends AppCompatActivity implements NavigationView
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        checkF = (CheckBox)findViewById(R.id.check_f_setting);
+        checkM = (CheckBox)findViewById(R.id.check_m_setting);
+        checkAll = (CheckBox)findViewById(R.id.check_all_setting);
+        checkWeek = (CheckBox)findViewById(R.id.check_week_setting);
+        checkDay = (CheckBox)findViewById(R.id.check_day_setting);
+        checkDayNight = (CheckBox)findViewById(R.id.check_day_night_setting);
+        checkServing = (CheckBox)findViewById(R.id.check_serving_setting);
+        checkService = (CheckBox)findViewById(R.id.check_service_setting);
+        checkManager = (CheckBox)findViewById(R.id.check_manager_setting);
+        checkPro = (CheckBox)findViewById(R.id.check_pro_setting);
+
+        checkAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(checkAll.isChecked()==true){
+                    checkWeek.setChecked(false);
+                    checkDay.setChecked(false);
+                    checkDayNight.setChecked(false);
+                }
+            }
+        });
+        checkWeek.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(checkWeek.isChecked()==true){
+                    checkAll.setChecked(false);
+                    checkDay.setChecked(false);
+                    checkDayNight.setChecked(false);
+                }
+            }
+        });
+        checkDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkDay.isChecked() == true){
+                    checkAll.setChecked(false);
+                    checkDayNight.setChecked(false);
+                    checkWeek.setChecked(false);
+                }
+            }
+        });
+        checkDayNight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkDayNight.isChecked() == true){
+                    checkAll.setChecked(false);
+                    checkDay.setChecked(false);
+                    checkWeek.setChecked(false);
+                }
+            }
+        });
+
+        checkF.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkF.isChecked() == true) {
+                    checkM.setChecked(false);
+                }
+            }
+        });
+        checkM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkM.isChecked() == true) {
+                    checkF.setChecked(false);
+                }
             }
         });
     }

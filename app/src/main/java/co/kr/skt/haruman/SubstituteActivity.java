@@ -1,8 +1,10 @@
 package co.kr.skt.haruman;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -10,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +24,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +47,7 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
     Spinner spinnerTown, spinnerBorough, spinnerType;
     ArrayAdapter<CharSequence> townspin, boroughspin, typespin;
     Button buttonAdd;
+    ArrayList<HRJsonObject> albaValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,19 +56,9 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
 
         mRecyclerView_sub = (RecyclerView) findViewById(R.id.sub_recyclerview);
 
-        mSubstituteAdapter = new SubstituteAdapter();
-        mSubstituteAdapter.setOnItemClickListener(new SubstituteViewHolder.OnItemClickListener() {
-            @Override
-            public void onItemClick(String name, int position) {
-                Toast.makeText(SubstituteActivity.this, "title_sub : " + name, Toast.LENGTH_SHORT).show();
-            }
-        });
-
         mRecyclerView_sub.setAdapter(mSubstituteAdapter);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView_sub.setLayoutManager(manager);
-
-        initData();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -208,12 +211,7 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
                 finish();
             }
         });
-    }
-
-    private void initData() {
-        for (int i = 0; i < 10; i++) {
-            mSubstituteAdapter.add("대타대타대타대타대타대타");
-        }
+        new HrListTask().execute();
     }
 
     @Override
@@ -226,6 +224,125 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
         }
     }
 
+    /* 대타 게시글 목록을 추출하는 백그라운드 쓰레드 */
+    private class HrListTask extends AsyncTask<String, Void, ArrayList<HRJsonObject>> {
+        ProgressDialog pd;
+
+        @Override
+        protected ArrayList<HRJsonObject> doInBackground(String... params) {
+
+            albaValues = new ArrayList();
+            HttpURLConnection connection = null;
+            BufferedReader fromServer = null;
+
+            try {
+                URL url = new URL(HaumanURLConstant.HR_LIST_DO);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setUseCaches(false);
+                connection.setConnectTimeout(10000);
+                connection.setRequestMethod("POST");
+                connection.setReadTimeout(15000);
+                OutputStream toServer = connection.getOutputStream();
+
+                toServer.close();
+
+                int responseCod = connection.getResponseCode();
+
+                if (responseCod == HttpURLConnection.HTTP_OK) {
+                    fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder jsonBuf = new StringBuilder();
+                    String line = "";
+
+                    while ((line = fromServer.readLine()) != null) {
+                        jsonBuf.append(line);
+                    }
+                    JSONObject root = new JSONObject(jsonBuf.toString());
+                    String resultValue = root.getString("result");
+
+                    if (resultValue.equalsIgnoreCase("success")) {
+                        albaValues = new ArrayList<HRJsonObject>();
+                        JSONArray albaInfos = root.getJSONArray("result_list");
+
+                        int jsonObjectSize = albaInfos.length();
+
+                        for (int i = 0; i < jsonObjectSize; i++) {
+                            JSONObject jsonObj = albaInfos.getJSONObject(i);
+                            HRJsonObject vo = new HRJsonObject();
+
+                            vo.ID = jsonObj.getString("ID");
+                            vo.HR_TITLE = jsonObj.getString("HR_TITLE");
+                            vo.HR_FINISH = jsonObj.getString("HR_FINISH");
+                            vo.HR_TYPE = jsonObj.getString("HR_TYPE");
+                            vo.HR_LOCAL = jsonObj.getString("HR_LOCAL");
+                            vo.HR_PAY = jsonObj.getString("HR_PAY");
+                            vo.HR_DATE = jsonObj.getString("HR_DATE");
+                            vo.HR_FINISH_CHECK = jsonObj.getString("HR_FINISH_CHECK");
+                            vo.HR_NUMBER = jsonObj.getInt("HR_NUMBER");
+
+                            albaValues.add(vo);
+                        }
+                    }
+                } else {
+
+                }
+            } catch (Exception e) {
+                Log.e("HrListTask 문제발생", e.toString());
+            } finally {
+                if (fromServer != null) {
+                    try {
+                        fromServer.close();
+
+                    } catch (IOException iew) {
+                    }
+                }
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+            return albaValues;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(SubstituteActivity.this);
+            pd = ProgressDialog.show(SubstituteActivity.this, "", "", true, true, null);
+        }
+
+        @Override
+        protected void onPostExecute(final ArrayList<HRJsonObject> hrJsonObjects) {
+            super.onPostExecute(hrJsonObjects);
+
+            if (hrJsonObjects != null && hrJsonObjects.size() > 0) {
+                Log.e("사이즈>>", hrJsonObjects.size() + "");
+
+                mSubstituteAdapter = new SubstituteAdapter(albaValues);
+                mRecyclerView_sub.setAdapter(mSubstituteAdapter);
+
+                mRecyclerView_sub.addOnItemTouchListener(new RecyclerItemClickListener(SubstituteActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        Log.e("클릭됨>>", position + "");
+                        Intent intent = new Intent(SubstituteActivity.this, HRInfo.class);
+                        finish();
+                        intent.putExtra("HRListPosition", albaValues.get(position).HR_NUMBER);
+                        startActivity(intent);
+                    }
+                }));
+//                txtCount.setText(mAdapter.getItemCount() + "");
+                if (pd != null) {
+                    pd.dismiss();
+                }
+            } else {
+                pd.dismiss();
+                Snackbar.make(mRecyclerView_sub, "연결상태가 원할하지 않습니다. 다시 시도해주세요.", Snackbar.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         return false;
@@ -234,17 +351,12 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
 
 class SubstituteAdapter extends RecyclerView.Adapter<SubstituteViewHolder> {
 
-    List<String> items = new ArrayList<String>();
+    List<HRJsonObject> albaJsonObjects = new ArrayList<HRJsonObject>();
 
     SubstituteViewHolder.OnItemClickListener mItemClickListener;
 
-    public void setOnItemClickListener(SubstituteViewHolder.OnItemClickListener listener) {
-        mItemClickListener = listener;
-    }
-
-    public void add(String item) {
-        items.add(item);
-        notifyDataSetChanged();
+    public SubstituteAdapter(List<HRJsonObject> HRJsonObjects) {
+        this.albaJsonObjects = HRJsonObjects;
     }
 
     @Override
@@ -255,17 +367,18 @@ class SubstituteAdapter extends RecyclerView.Adapter<SubstituteViewHolder> {
 
     @Override
     public void onBindViewHolder(SubstituteViewHolder holder, int position) {
-        holder.setData(items.get(position), items.get(position), items.get(position), items.get(position));
+        holder.setData(albaJsonObjects.get(position));
         holder.setOnItemClickListener(mItemClickListener);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return albaJsonObjects.size();
     }
 }
 
 class SubstituteViewHolder extends RecyclerView.ViewHolder {
+
     public interface OnItemClickListener {
         public void onItemClick(String name, int position);
     }
@@ -274,47 +387,49 @@ class SubstituteViewHolder extends RecyclerView.ViewHolder {
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
+
     }
 
-    EditText editTitle_sub;
-    EditText editLocal_sub;
-    EditText editType_sub;
-    EditText editPay_sub;
+    EditText editTitle, editType, editLocal, editPay;
 
     public SubstituteViewHolder(View itemView) {
         super(itemView);
-        editTitle_sub = (EditText) itemView.findViewById(R.id.edit_title_sub);
+        editTitle = (EditText) itemView.findViewById(R.id.edit_title_sub);
+        editType = (EditText) itemView.findViewById(R.id.edit_type_sub);
+        editLocal = (EditText) itemView.findViewById(R.id.edit_local_sub);
+        editPay = (EditText) itemView.findViewById(R.id.edit_pay_sub);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
                 if (mListener != null && position != RecyclerView.NO_POSITION) {
                     mListener.onItemClick(mTitle, position);
-                    mListener.onItemClick(mLocal, position);
                     mListener.onItemClick(mType, position);
+                    mListener.onItemClick(mLocal, position);
                     mListener.onItemClick(mPay, position);
                 }
             }
         });
-        editLocal_sub = (EditText) itemView.findViewById(R.id.edit_local_sub);
-        editType_sub = (EditText) itemView.findViewById(R.id.edit_type_sub);
-        editPay_sub = (EditText) itemView.findViewById(R.id.edit_pay_sub);
-
     }
 
-    String mLocal;
-    String mType;
-    String mPay;
-    String mTitle;
+    String mTitle, mType, mLocal, mPay;
 
-    public void setData(String title, String local, String type, String pay) {
-        mTitle = title;
-        mLocal = local;
-        mType = type;
-        mPay = pay;
-        editTitle_sub.setText(title);
-        editLocal_sub.setText(local);
-        editType_sub.setText(type);
-        editPay_sub.setText(pay);
+    public void setData(HRJsonObject albaJsonObject) {
+        mTitle = albaJsonObject.HR_TITLE;
+        mType = albaJsonObject.HR_TYPE;
+        mLocal = albaJsonObject.HR_LOCAL;
+        mPay = albaJsonObject.HR_PAY;
+        editTitle.setText(mTitle);
+        if (mType.equalsIgnoreCase("E")) {
+            editType.setText("서빙○주방");
+        } else if (mType.equalsIgnoreCase("M")) {
+            editType.setText("매장관리");
+        } else if (mType.equalsIgnoreCase("S")) {
+            editType.setText("서비스");
+        } else if (mType.equalsIgnoreCase("P")) {
+            editType.setText("생산○기능");
+        }
+        editLocal.setText(mLocal);
+        editPay.setText(mPay + "원");
     }
 }

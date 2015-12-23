@@ -257,7 +257,7 @@
                     android:id="@+id/edit_pay_insert"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:hint="급여 지금 시기"
+                    android:hint="급여 지급 시기"
                     android:textSize="12dp" />
 
                 <LinearLayout

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -46,10 +47,10 @@
                 android:paddingRight="16dp">
 
                 <LinearLayout
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp">
 
@@ -104,8 +105,7 @@
                             android:id="@+id/spinner_borough_substitute_insert"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:entries="@array/spinner_borough_seoul"
-                             />
+                            android:entries="@array/spinner_borough_seoul" />
 
                     </LinearLayout>
 
@@ -156,7 +156,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="현재 최저시급은 \n 6030원 입니다."
+                            android:text="2016년 현재\n최저시급은 6030원"
                             android:textColor="#bdbdbd"
                             android:textSize="10dp" />
 
@@ -214,11 +214,10 @@
                             android:orientation="vertical">
 
 
-
                             <Spinner
+                                android:id="@+id/spinner_Month"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/spinner_Month"/>
+                                android:layout_height="wrap_content" />
 
 
                         </LinearLayout>
@@ -249,9 +248,9 @@
 
 
                             <Spinner
+                                android:id="@+id/spinner_day"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/spinner_day"/>
+                                android:layout_height="wrap_content" />
 
                         </LinearLayout>
 
@@ -278,6 +277,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="직종 : " />
 
                     <LinearLayout
@@ -358,11 +358,11 @@
                         android:text="성별 : " />
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -375,19 +375,20 @@
                                 android:orientation="horizontal">
 
                                 <RadioButton
-                                    android:layout_marginLeft="50dp"
                                     android:id="@+id/gender_radio_m"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="50dp" />
 
                                 <RadioButton
-                                    android:layout_marginLeft="100dp"
                                     android:id="@+id/gender_radio_f"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="100dp" />
 
                             </RadioGroup>
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -431,7 +432,7 @@
 
                         <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
+                            android:layout_height="230dp"
                             android:layout_marginLeft="20dp">
 
                             <ScrollView
