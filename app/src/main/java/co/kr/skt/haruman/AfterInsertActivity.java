@@ -15,6 +15,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -30,6 +32,8 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
     ArrayAdapter<CharSequence> boroughspin;
 
     Spinner spinnerTown, spinnerBorough;
+
+    CheckBox check1, check2, check3, check4, check5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +61,10 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                 submitForm();
             }
         });
-        Button substitute = (Button)findViewById(R.id.nav_substitute);
-        Button alba = (Button)findViewById(R.id.nav_alba);
-        Button setting = (Button)findViewById(R.id.nav_setting);
-        Button after = (Button)findViewById(R.id.nav_after);
+        Button substitute = (Button) findViewById(R.id.nav_substitute);
+        Button alba = (Button) findViewById(R.id.nav_alba);
+        Button setting = (Button) findViewById(R.id.nav_setting);
+        Button after = (Button) findViewById(R.id.nav_after);
 
         substitute.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,8 +107,70 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
             }
         });
 
-        spinnerTown = (Spinner)findViewById(R.id.spinner_after_town_insert);
-        spinnerBorough = (Spinner)findViewById(R.id.spinner_after_borough_insert);
+        check1 = (CheckBox) findViewById(R.id.check1);
+        check2 = (CheckBox) findViewById(R.id.check2);
+        check3 = (CheckBox) findViewById(R.id.check3);
+        check4 = (CheckBox) findViewById(R.id.check4);
+        check5 = (CheckBox) findViewById(R.id.check5);
+
+        check1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (check1.isChecked() == true) {
+                    check2.setChecked(false);
+                    check3.setChecked(false);
+                    check4.setChecked(false);
+                    check5.setChecked(false);
+                }
+            }
+        });
+        check2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (check2.isChecked() == true) {
+                    check1.setChecked(false);
+                    check3.setChecked(false);
+                    check4.setChecked(false);
+                    check5.setChecked(false);
+                }
+            }
+        });
+        check3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (check3.isChecked() == true) {
+                    check1.setChecked(false);
+                    check2.setChecked(false);
+                    check4.setChecked(false);
+                    check5.setChecked(false);
+                }
+            }
+        });
+        check4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (check4.isChecked() == true) {
+                    check1.setChecked(false);
+                    check2.setChecked(false);
+                    check3.setChecked(false);
+                    check5.setChecked(false);
+                }
+            }
+        });
+        check5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (check5.isChecked() == true) {
+                    check1.setChecked(false);
+                    check2.setChecked(false);
+                    check3.setChecked(false);
+                    check4.setChecked(false);
+                }
+            }
+        });
+
+        spinnerTown = (Spinner) findViewById(R.id.spinner_after_town_insert);
+        spinnerBorough = (Spinner) findViewById(R.id.spinner_after_borough_insert);
 
         townspin = ArrayAdapter.createFromResource(this, R.array.spinner_town, R.layout.support_simple_spinner_dropdown_item);
         townspin.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -130,7 +196,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                                 mlnitSpinner = true;
                                 return;
                             }
-                            Toast.makeText(AfterInsertActivity.this, boroughspin.getItem(position), Toast.LENGTH_SHORT).show();
+
                         }
 
                         @Override
@@ -166,7 +232,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
 
             }
         });
-        Button btnBack = (Button)findViewById(R.id.btn_back_after_insert);
+        Button btnBack = (Button) findViewById(R.id.btn_back_after_insert);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,17 +242,14 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
     }
 
 
-
-
-
     private void submitForm() {
         if (!validateTitle()) {
             return;
         }
-        if(!validateContent()){
+        if (!validateContent()) {
             return;
         }
-        LinearLayout sub = (LinearLayout)findViewById(R.id.sub);
+        LinearLayout sub = (LinearLayout) findViewById(R.id.sub);
 //        Snackbar snackbar = Snackbar.make(sub, "등록되었습니다.", Snackbar.LENGTH_LONG);
 //        snackbar.show();
         Toast.makeText(AfterInsertActivity.this, "등록되었습니다.", Toast.LENGTH_SHORT).show();
@@ -206,8 +269,6 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
 
         return true;
     }
-
-
 
 
     @Override

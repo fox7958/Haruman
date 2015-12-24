@@ -102,11 +102,11 @@
                             android:gravity="right">
 
                             <Spinner
-                                android:entries="@array/spinner_borough_seoul"
                                 android:id="@+id/spinner_after_borough_insert"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"></Spinner>
+                                android:layout_gravity="center"
+                                android:entries="@array/spinner_borough_seoul"></Spinner>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -159,38 +159,31 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
-                            <RadioGroup
-                                android:id="@+id/after_group"
+                            <CheckBox
+                                android:id="@+id/check1"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_height="wrap_content" />
 
-                                <RadioButton
-                                    android:id="@+id/after_button1"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                            <CheckBox
+                                android:id="@+id/check2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
-                                <RadioButton
-                                    android:id="@+id/after_button2"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                            <CheckBox
+                                android:id="@+id/check3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
-                                <RadioButton
-                                    android:id="@+id/after_button3"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                            <CheckBox
+                                android:id="@+id/check4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
-                                <RadioButton
-                                    android:id="@+id/after_button4"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                            <CheckBox
+                                android:id="@+id/check5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
-                                <RadioButton
-                                    android:id="@+id/after_button5"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-
-                            </RadioGroup>
                         </LinearLayout>
 
                         <LinearLayout
@@ -272,33 +265,45 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
 
-                            <RadioGroup
-                                android:id="@+id/after_pay"
-                                android:layout_width="match_parent"
+                            <LinearLayout
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_weight="1">
 
-                                <RadioButton
-                                    android:layout_marginLeft="40dp"
-                                    android:id="@+id/pay_button1"
+                                <CheckBox
+                                    android:id="@+id/check1week"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
+                            </LinearLayout>
 
-                                <RadioButton
-                                    android:layout_marginLeft="70dp"
-                                    android:id="@+id/pay_button2"
+                            <LinearLayout
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <CheckBox
+                                    android:id="@+id/check2week"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
+                            </LinearLayout>
 
-                                <RadioButton
-                                    android:layout_marginLeft="80dp"
-                                    android:id="@+id/pay_button3"
+                            <LinearLayout
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <CheckBox
+                                    android:id="@+id/check1month"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
+                            </LinearLayout>
 
-                            </RadioGroup>
                         </LinearLayout>
 
                         <LinearLayout
@@ -348,18 +353,18 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:maxLength="80"
                     android:id="@+id/edit_content_insert"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:ems="13"
-                    android:hint="한줄후기" />
+                    android:hint="한줄후기"
+                    android:maxLength="80" />
 
                 <TextView
-                    android:textColor="#bdbdbd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="80자 이내로 작성해주세요."/>
+                    android:text="80자 이내로 작성해주세요."
+                    android:textColor="#bdbdbd" />
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
