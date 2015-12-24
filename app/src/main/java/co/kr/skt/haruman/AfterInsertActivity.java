@@ -175,6 +175,10 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
         });
     }
 
+
+
+
+
     private void submitForm() {
         if (!validateTitle()) {
             return;
@@ -202,6 +206,9 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
 
         return true;
     }
+
+
+
 
     @Override
     public void onBackPressed() {

@@ -22,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,6 +47,8 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
     ArrayAdapter<CharSequence> townspin, boroughspin, typespin;
     Button buttonAdd;
     ArrayList<HRJsonObject> albaValues;
+    EditText townSave, boroughSave, typeSave;
+    Button searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,12 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
         mRecyclerView_sub.setAdapter(mSubstituteAdapter);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView_sub.setLayoutManager(manager);
+
+        townSave = (EditText)findViewById(R.id.town_save);
+        boroughSave = (EditText)findViewById(R.id.borough_save);
+        typeSave = (EditText)findViewById(R.id.type_save);
+
+        searchButton = (Button)findViewById(R.id.search_btn);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -135,6 +142,14 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
                     return;
                 }
 
+                if (townspin.getItem(position).toString().trim().equalsIgnoreCase("=====")) {
+                    townSave.setText("");
+                    Log.e("타운", townSave.getText().toString());
+                } else {
+                    townSave.setText(townspin.getItem(position).toString());
+                    Log.e("타운", townSave.getText().toString());
+                }
+
                 if (townspin.getItem(position).equals("서울시")) {
                     boroughspin = ArrayAdapter.createFromResource(SubstituteActivity.this, R.array.spinner_borough_seoul, R.layout.support_simple_spinner_dropdown_item);
                     spinnerBorough.setAdapter(boroughspin);
@@ -145,6 +160,13 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
                             if (mlnitSpinner == false) {
                                 mlnitSpinner = true;
                                 return;
+                            }
+                            if (boroughspin.getItem(position).toString().trim().equalsIgnoreCase("=====")) {
+                                boroughSave.setText("");
+                                Log.e("구", boroughSave.getText().toString());
+                            } else {
+                                boroughSave.setText(boroughspin.getItem(position).toString());
+                                Log.e("구", boroughSave.getText().toString());
                             }
                         }
 
@@ -163,6 +185,13 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
                             if (mlnitSpinner == false) {
                                 mlnitSpinner = true;
                                 return;
+                            }
+                            if (boroughspin.getItem(position).toString().trim().equalsIgnoreCase("=====")) {
+                                boroughSave.setText("");
+                                Log.e("구", boroughSave.getText().toString());
+                            } else {
+                                boroughSave.setText(boroughspin.getItem(position).toString());
+                                Log.e("구", boroughSave.getText().toString());
                             }
                         }
 
@@ -187,7 +216,17 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
                     mlnitSpinner = true;
                     return;
                 }
-                Toast.makeText(SubstituteActivity.this, typespin.getItem(position), Toast.LENGTH_SHORT).show();
+                if (typespin.getItem(position).toString().equalsIgnoreCase("매장관리")) {
+                    typeSave.setText("M");
+                } else if (typespin.getItem(position).toString().equalsIgnoreCase("서빙○주방")) {
+                    typeSave.setText("E");
+                } else if (typespin.getItem(position).toString().equalsIgnoreCase("생산○기능")) {
+                    typeSave.setText("P");
+                } else if (typespin.getItem(position).toString().equalsIgnoreCase("서비스")) {
+                    typeSave.setText("S");
+                } else {
+                    typeSave.setText("");
+                }
             }
 
             @Override
@@ -212,6 +251,31 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
             }
         });
         new HrListTask().execute();
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (townSave.getText().toString().trim().equalsIgnoreCase("") && boroughSave.getText().toString().trim().equalsIgnoreCase("")) {
+                    new HrSearchTypeTask().execute(typeSave.getText().toString());
+                    boroughSave.setText("");
+                    townSave.setText("");
+                    typeSave.setText("");
+                    spinnerType.setPrompt(typespin.getItem(1));
+                } else if (typeSave.getText().toString().trim().equalsIgnoreCase("")) {
+                    new HrSearchLocalTask().execute(townSave.getText().toString() + " " + boroughSave.getText().toString());
+                    boroughSave.setText("");
+                    townSave.setText("");
+                    typeSave.setText("");
+                } else {
+                    new HrSearchTypeAndLocalTask().execute(typeSave.getText().toString(), townSave.getText().toString() + " " + boroughSave.getText().toString());
+                    boroughSave.setText("");
+                    townSave.setText("");
+                    typeSave.setText("");
+                }
+                Log.e("로컬", townSave.getText().toString() + " " + boroughSave.getText().toString());
+                Log.e("타입", typeSave.getText().toString());
+            }
+        });
     }
 
     @Override
@@ -223,6 +287,391 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
             super.onBackPressed();
         }
     }
+
+    /* 지역으로 검색한 결과 출력해주는 백그라운드 쓰레드 */
+    private class HrSearchLocalTask extends AsyncTask<String, Void, ArrayList<HRJsonObject>> {
+        ProgressDialog pd;
+
+        @Override
+        protected ArrayList<HRJsonObject> doInBackground(String... params) {
+
+            albaValues = new ArrayList();
+            String local = params[0];
+            HttpURLConnection connection = null;
+            BufferedReader fromServer = null;
+
+            try {
+                URL url = new URL(HaumanURLConstant.HR_LOCAL_SEARCH_DO);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setUseCaches(false);
+                connection.setConnectTimeout(10000);
+                connection.setRequestMethod("POST");
+                connection.setReadTimeout(15000);
+                OutputStream toServer = connection.getOutputStream();
+
+                toServer.write(("HR_LOCAL=" + local).getBytes("UTF-8"));
+                toServer.close();
+
+                int responseCod = connection.getResponseCode();
+
+                if (responseCod == HttpURLConnection.HTTP_OK) {
+                    fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder jsonBuf = new StringBuilder();
+                    String line = "";
+
+                    while ((line = fromServer.readLine()) != null) {
+                        jsonBuf.append(line);
+                    }
+                    JSONObject root = new JSONObject(jsonBuf.toString());
+                    String resultValue = root.getString("result");
+
+                    if (resultValue.equalsIgnoreCase("success")) {
+                        albaValues = new ArrayList<HRJsonObject>();
+                        JSONArray albaInfos = root.getJSONArray("result_local");
+
+                        int jsonObjectSize = albaInfos.length();
+
+                        for (int i = 0; i < jsonObjectSize; i++) {
+                            JSONObject jsonObj = albaInfos.getJSONObject(i);
+                            HRJsonObject vo = new HRJsonObject();
+
+                            vo.ID = jsonObj.getString("ID");
+                            vo.HR_TITLE = jsonObj.getString("HR_TITLE");
+                            vo.HR_FINISH = jsonObj.getString("HR_FINISH");
+                            vo.HR_LOCAL = jsonObj.getString("HR_LOCAL");
+                            vo.HR_TYPE = jsonObj.getString("HR_TYPE");
+                            vo.HR_PAY = jsonObj.getString("HR_PAY");
+                            vo.HR_DATE = jsonObj.getString("HR_DATE");
+                            vo.HR_FINISH_CHECK = jsonObj.getString("HR_FINISH_CHECK");
+                            vo.HR_NUMBER = jsonObj.getInt("HR_NUMBER");
+
+                            albaValues.add(vo);
+                        }
+                    }
+                } else {
+
+                }
+            } catch (Exception e) {
+                Log.e("HrSearchLocalTask 문제발생", e.toString());
+            } finally {
+                if (fromServer != null) {
+                    try {
+                        fromServer.close();
+
+                    } catch (IOException iew) {
+                    }
+                }
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+            return albaValues;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(SubstituteActivity.this);
+            pd = ProgressDialog.show(SubstituteActivity.this, "", "", true, true, null);
+        }
+
+        @Override
+        protected void onPostExecute(final ArrayList<HRJsonObject> albaJsonObjects) {
+            super.onPostExecute(albaJsonObjects);
+
+            if (albaJsonObjects != null && albaJsonObjects.size() > 0) {
+                Log.e("사이즈>>", albaJsonObjects.size() + "");
+
+                mSubstituteAdapter = new SubstituteAdapter(albaValues);
+                mRecyclerView_sub.setAdapter(mSubstituteAdapter);
+
+                mRecyclerView_sub.addOnItemTouchListener(new RecyclerItemClickListener(SubstituteActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        Log.e("클릭됨>>", position + "");
+                        Intent intent = new Intent(SubstituteActivity.this, AlbaInfo.class);
+                        finish();
+                        intent.putExtra("ListPosition", albaValues.get(position).HR_NUMBER);
+                        startActivity(intent);
+                    }
+                }));
+//                txtCount.setText(mAdapter.getItemCount() + "");
+                if (pd != null) {
+                    pd.dismiss();
+                }
+            } else {
+                pd.dismiss();
+                townSave.setText("");
+                boroughSave.setText("");
+                Snackbar.make(mRecyclerView_sub, "검색한 결과가 없습니다.", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+
+
+
+
+    /* 직종과 지역으로 검색한 결과 출력해주는 백그라운드 쓰레드 */
+    private class HrSearchTypeAndLocalTask extends AsyncTask<String, Void, ArrayList<HRJsonObject>> {
+        ProgressDialog pd;
+
+        @Override
+        protected ArrayList<HRJsonObject> doInBackground(String... params) {
+
+            albaValues = new ArrayList();
+            String type = params[0];
+            String local = params[1];
+            HttpURLConnection connection = null;
+            BufferedReader fromServer = null;
+
+            try {
+                URL url = new URL(HaumanURLConstant.HR_TYPEANDLOCAL_SEARCH_DO);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setUseCaches(false);
+                connection.setConnectTimeout(10000);
+                connection.setRequestMethod("POST");
+                connection.setReadTimeout(15000);
+                OutputStream toServer = connection.getOutputStream();
+
+                toServer.write(("HR_TYPE=" + type + "&HR_LOCAL=" + local).getBytes("UTF-8"));
+                toServer.close();
+
+                int responseCod = connection.getResponseCode();
+
+                if (responseCod == HttpURLConnection.HTTP_OK) {
+                    fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder jsonBuf = new StringBuilder();
+                    String line = "";
+
+                    while ((line = fromServer.readLine()) != null) {
+                        jsonBuf.append(line);
+                    }
+                    JSONObject root = new JSONObject(jsonBuf.toString());
+                    String resultValue = root.getString("result");
+
+                    if (resultValue.equalsIgnoreCase("success")) {
+                        albaValues = new ArrayList<HRJsonObject>();
+                        JSONArray albaInfos = root.getJSONArray("result_typeAndlocal");
+
+                        int jsonObjectSize = albaInfos.length();
+
+                        for (int i = 0; i < jsonObjectSize; i++) {
+                            JSONObject jsonObj = albaInfos.getJSONObject(i);
+                            HRJsonObject vo = new HRJsonObject();
+
+                            vo.ID = jsonObj.getString("ID");
+                            vo.HR_TITLE = jsonObj.getString("HR_TITLE");
+                            vo.HR_FINISH = jsonObj.getString("HR_FINISH");
+                            vo.HR_LOCAL = jsonObj.getString("HR_LOCAL");
+                            vo.HR_TYPE = jsonObj.getString("HR_TYPE");
+                            vo.HR_PAY = jsonObj.getString("HR_PAY");
+                            vo.HR_DATE = jsonObj.getString("HR_DATE");
+                            vo.HR_FINISH_CHECK = jsonObj.getString("HR_FINISH_CHECK");
+                            vo.HR_NUMBER = jsonObj.getInt("HR_NUMBER");
+
+                            albaValues.add(vo);
+                        }
+                    }
+                } else {
+
+                }
+            } catch (Exception e) {
+                Log.e("HrSearchTypeAndLocalTask 문제발생", e.toString());
+            } finally {
+                if (fromServer != null) {
+                    try {
+                        fromServer.close();
+
+                    } catch (IOException iew) {
+                    }
+                }
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+            return albaValues;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(SubstituteActivity.this);
+            pd = ProgressDialog.show(SubstituteActivity.this, "", "", true, true, null);
+        }
+
+        @Override
+        protected void onPostExecute(final ArrayList<HRJsonObject> albaJsonObjects) {
+            super.onPostExecute(albaJsonObjects);
+
+            if (albaJsonObjects != null && albaJsonObjects.size() > 0) {
+                Log.e("사이즈>>", albaJsonObjects.size() + "");
+
+                mSubstituteAdapter = new SubstituteAdapter(albaValues);
+                mRecyclerView_sub.setAdapter(mSubstituteAdapter);
+
+//                mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(AlbaActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//
+//                        Log.e("클릭됨>>", position + "");
+//                        Intent intent = new Intent(AlbaActivity.this, AlbaInfo.class);
+//                        finish();
+//                        intent.putExtra("ListPosition", albaValues.get(position).AB_NUMBER);
+//                        startActivity(intent);
+//                    }
+//                }));
+//                txtCount.setText(mAdapter.getItemCount() + "");
+                if (pd != null) {
+                    pd.dismiss();
+                }
+            } else {
+                pd.dismiss();
+                townSave.setText("");
+                boroughSave.setText("");
+                Snackbar.make(mRecyclerView_sub, "검색한 결과가 없습니다.", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+
+
+
+
+    /* 직종으로 검색한 결과 출력해주는 백그라운드 쓰레드 */
+    private class HrSearchTypeTask extends AsyncTask<String, Void, ArrayList<HRJsonObject>> {
+        ProgressDialog pd;
+
+        @Override
+        protected ArrayList<HRJsonObject> doInBackground(String... params) {
+
+            albaValues = new ArrayList();
+            String type = params[0];
+            HttpURLConnection connection = null;
+            BufferedReader fromServer = null;
+
+            try {
+                URL url = new URL(HaumanURLConstant.HR_TYPE_SEARCH_DO);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setUseCaches(false);
+                connection.setConnectTimeout(10000);
+                connection.setRequestMethod("POST");
+                connection.setReadTimeout(15000);
+                OutputStream toServer = connection.getOutputStream();
+
+                toServer.write(("HR_TYPE=" + type).getBytes("UTF-8"));
+                toServer.close();
+
+                int responseCod = connection.getResponseCode();
+
+                if (responseCod == HttpURLConnection.HTTP_OK) {
+                    fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder jsonBuf = new StringBuilder();
+                    String line = "";
+
+                    while ((line = fromServer.readLine()) != null) {
+                        jsonBuf.append(line);
+                    }
+                    JSONObject root = new JSONObject(jsonBuf.toString());
+                    String resultValue = root.getString("result");
+
+                    if (resultValue.equalsIgnoreCase("success")) {
+                        albaValues = new ArrayList<HRJsonObject>();
+                        JSONArray albaInfos = root.getJSONArray("result_type");
+
+                        int jsonObjectSize = albaInfos.length();
+
+                        for (int i = 0; i < jsonObjectSize; i++) {
+                            JSONObject jsonObj = albaInfos.getJSONObject(i);
+                            HRJsonObject vo = new HRJsonObject();
+
+                            vo.ID = jsonObj.getString("ID");
+                            vo.HR_TITLE = jsonObj.getString("HR_TITLE");
+                            vo.HR_FINISH = jsonObj.getString("HR_FINISH");
+                            vo.HR_LOCAL = jsonObj.getString("HR_LOCAL");
+                            vo.HR_TYPE = jsonObj.getString("HR_TYPE");
+                            vo.HR_PAY = jsonObj.getString("HR_PAY");
+                            vo.HR_DATE = jsonObj.getString("HR_DATE");
+                            vo.HR_FINISH_CHECK = jsonObj.getString("HR_FINISH_CHECK");
+                            vo.HR_NUMBER = jsonObj.getInt("HR_NUMBER");
+
+                            albaValues.add(vo);
+                        }
+                    }
+                } else {
+
+                }
+            } catch (Exception e) {
+                Log.e("HrSearchTypeTask 문제발생", e.toString());
+            } finally {
+                if (fromServer != null) {
+                    try {
+                        fromServer.close();
+
+                    } catch (IOException iew) {
+                    }
+                }
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+            return albaValues;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(SubstituteActivity.this);
+            pd = ProgressDialog.show(SubstituteActivity.this, "", "", true, true, null);
+        }
+
+        @Override
+        protected void onPostExecute(final ArrayList<HRJsonObject> albaJsonObjects) {
+            super.onPostExecute(albaJsonObjects);
+
+            if (albaJsonObjects != null && albaJsonObjects.size() > 0) {
+                Log.e("사이즈>>", albaJsonObjects.size() + "");
+
+                mSubstituteAdapter = new SubstituteAdapter(albaValues);
+                mRecyclerView_sub.setAdapter(mSubstituteAdapter);
+
+//                mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(AlbaActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//
+//                        Log.e("클릭됨>>", position + "");
+//                        Intent intent = new Intent(AlbaActivity.this, AlbaInfo.class);
+//                        finish();
+//                        intent.putExtra("ListPosition", albaValues.get(position).AB_NUMBER);
+//                        startActivity(intent);
+//                    }
+//                }));
+//                txtCount.setText(mAdapter.getItemCount() + "");
+                if (pd != null) {
+                    pd.dismiss();
+                }
+            } else {
+                pd.dismiss();
+                townSave.setText("");
+                boroughSave.setText("");
+                Snackbar.make(mRecyclerView_sub, "검색한 결과가 없습니다.", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+
+
+
 
     /* 대타 게시글 목록을 추출하는 백그라운드 쓰레드 */
     private class HrListTask extends AsyncTask<String, Void, ArrayList<HRJsonObject>> {
@@ -273,11 +722,11 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
 
                             vo.ID = jsonObj.getString("ID");
                             vo.HR_TITLE = jsonObj.getString("HR_TITLE");
-                            vo.HR_FINISH = jsonObj.getString("HR_FINISH");
-                            vo.HR_TYPE = jsonObj.getString("HR_TYPE");
                             vo.HR_LOCAL = jsonObj.getString("HR_LOCAL");
                             vo.HR_PAY = jsonObj.getString("HR_PAY");
+                            vo.HR_TYPE = jsonObj.getString("HR_TYPE");
                             vo.HR_DATE = jsonObj.getString("HR_DATE");
+                            vo.HR_FINISH = jsonObj.getString("HR_FINISH");
                             vo.HR_FINISH_CHECK = jsonObj.getString("HR_FINISH_CHECK");
                             vo.HR_NUMBER = jsonObj.getInt("HR_NUMBER");
 
@@ -327,8 +776,8 @@ public class SubstituteActivity extends AppCompatActivity implements NavigationV
 
                         Log.e("클릭됨>>", position + "");
                         Intent intent = new Intent(SubstituteActivity.this, HRInfo.class);
-                        finish();
                         intent.putExtra("HRListPosition", albaValues.get(position).HR_NUMBER);
+                        finish();
                         startActivity(intent);
                     }
                 }));

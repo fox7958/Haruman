@@ -34,6 +34,8 @@
                     android:textSize="12dp" />
 
                 <EditText
+                    android:textColor="@android:color/black"
+                    android:enabled="false"
                     android:id="@+id/edit_title_sub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -65,6 +67,8 @@
                         android:textSize="12dp" />
 
                     <EditText
+                        android:textColor="@android:color/black"
+                        android:enabled="false"
                         android:id="@+id/edit_local_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -88,6 +92,8 @@
                         android:textSize="12dp" />
 
                     <EditText
+                        android:textColor="@android:color/black"
+                        android:enabled="false"
                         android:id="@+id/edit_type_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -109,21 +115,25 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_gravity="right"
-                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="급여▼"
+                    android:text="▼급여▼"
                     android:textSize="12dp" />
 
                 <EditText
+                    android:textColor="@android:color/black"
+                    android:enabled="false"
+                    android:textAlignment="viewEnd"
                     android:id="@+id/edit_pay_sub"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:contextClickable="false"
                     android:editable="false"
                     android:ellipsize="end"
-                    android:ems="5"
+                    android:ems="4"
                     android:singleLine="true"
                     android:textSize="12dp" />
             </LinearLayout>
