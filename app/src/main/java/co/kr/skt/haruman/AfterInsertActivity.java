@@ -34,6 +34,9 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
     Spinner spinnerTown, spinnerBorough;
 
     CheckBox check1, check2, check3, check4, check5;
+    CheckBox checkW1, checkW2, checkM;
+
+    EditText townSave, boroughSave, levelSave, timeSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +116,49 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
         check4 = (CheckBox) findViewById(R.id.check4);
         check5 = (CheckBox) findViewById(R.id.check5);
 
+        checkW1 = (CheckBox) findViewById(R.id.check1week);
+        checkW2 = (CheckBox) findViewById(R.id.check2week);
+        checkM = (CheckBox) findViewById(R.id.check1month);
+
+        townSave = (EditText)findViewById(R.id.townSave_after);
+        boroughSave = (EditText)findViewById(R.id.boroughSave_after);
+        levelSave = (EditText)findViewById(R.id.satisfactionSave_after);
+        timeSave = (EditText)findViewById(R.id.timeSave_after);
+
+        checkW1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkW1.isChecked()==true){
+                    checkW2.setChecked(false);
+                    checkM.setChecked(false);
+                    timeSave.setText("1");
+                }
+            }
+
+        });
+
+        checkW2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkW2.isChecked()==true){
+                    checkW1.setChecked(false);
+                    checkM.setChecked(false);
+                    timeSave.setText("2");
+                }
+            }
+        });
+
+        checkM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkM.isChecked()==true){
+                    checkW1.setChecked(false);
+                    checkW2.setChecked(false);
+                    timeSave.setText("3");
+                }
+            }
+        });
+
         check1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -121,6 +167,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                     check3.setChecked(false);
                     check4.setChecked(false);
                     check5.setChecked(false);
+                    levelSave.setText("1");
                 }
             }
         });
@@ -132,6 +179,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                     check3.setChecked(false);
                     check4.setChecked(false);
                     check5.setChecked(false);
+                    levelSave.setText("2");
                 }
             }
         });
@@ -143,6 +191,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                     check2.setChecked(false);
                     check4.setChecked(false);
                     check5.setChecked(false);
+                    levelSave.setText("3");
                 }
             }
         });
@@ -154,6 +203,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                     check2.setChecked(false);
                     check3.setChecked(false);
                     check5.setChecked(false);
+                    levelSave.setText("4");
                 }
             }
         });
@@ -165,6 +215,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                     check2.setChecked(false);
                     check3.setChecked(false);
                     check4.setChecked(false);
+                    levelSave.setText("5");
                 }
             }
         });
@@ -183,7 +234,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                     mlnitSpinner = true;
                     return;
                 }
-                Toast.makeText(AfterInsertActivity.this, townspin.getItem(position), Toast.LENGTH_SHORT).show();
+                townSave.setText(townspin.getItem(position).toString());
 
                 if (townspin.getItem(position).equals("서울시")) {
                     boroughspin = ArrayAdapter.createFromResource(AfterInsertActivity.this, R.array.spinner_borough_seoul, R.layout.support_simple_spinner_dropdown_item);
@@ -196,7 +247,7 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                                 mlnitSpinner = true;
                                 return;
                             }
-
+                            boroughSave.setText(boroughspin.getItem(position).toString());
                         }
 
                         @Override
@@ -215,9 +266,8 @@ public class AfterInsertActivity extends AppCompatActivity implements Navigation
                                 mlnitSpinner = true;
                                 return;
                             }
-                            Toast.makeText(AfterInsertActivity.this, boroughspin.getItem(position), Toast.LENGTH_SHORT).show();
+                            boroughSave.setText(boroughspin.getItem(position).toString());
                         }
-
 
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
